@@ -15,17 +15,17 @@ pipeline {
         stage("Pipeline"){
             steps {
                 script{
-                  switch(params.compileTool)
-                    {
-                        case 'Maven':
-                            def ejecucion = load 'maven.groovy'
-                            ejecucion.call()
-                        break;
-                        case 'Gradle':
-                            def ejecucion = load 'gradle.groovy'
-                            ejecucion.call()
-                        break;
-                    }
+                  if(params.compileTool == 'maven'){
+                          //compilar maven
+                          //def executor = load "maven.groovy"
+                          //executor.call()
+                        maven.call();
+                      }else{
+                          //compilar gradle
+                          //def executor = load "gradle.groovy"
+                          //executor.call()
+                        gradle.call()
+                      }
                 }
             }
             post{
