@@ -1,8 +1,5 @@
 def call(stages)
 {
-    echo 'Stages a ejecutar :' + stages
-    def mapa = [100 : 'Continue', 200 : 'OK', 400 : 'badRequest']
-    echo 'valor => ' + mapa.size()
     def listStagesOrder = [
         'build': 'stageCleanBuildTest',
         'sonar': 'stageSonar',
@@ -36,7 +33,6 @@ def stageCleanBuildTest(){
     stage("$env.TAREA"){
         sh "echo 'Build && Test!'"
         sh "gradle clean build"
-        // code
     }
 }
 
@@ -59,7 +55,6 @@ def stageRunSpringCurl() {
 }
 
 def stageUploadNexus() {
-
     stage("Paso 4: Subir Nexus"){
         env.TAREA = "Paso 4: Subir Nexus"
         nexusPublisher nexusInstanceId: 'nexus',
@@ -84,7 +79,6 @@ def stageUploadNexus() {
 }
 
 def stageDownloadNexus() {
-
     stage("Paso 5: Descargar Nexus"){
         env.TAREA = "Paso 5: Descargar Nexus"
         sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
