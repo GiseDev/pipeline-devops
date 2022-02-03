@@ -15,7 +15,7 @@ echo '1'
         'curl_jar': 'stageCurlJar'
     ]
 echo '2'​
-    if (stages.isEmpty()) {
+    if (stages == "") {
         echo 'El pipeline se ejecutará completo'
         allStages()
     } else {
