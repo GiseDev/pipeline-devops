@@ -1,10 +1,8 @@
-/*
-	forma de invocación de método call:
-	def ejecucion = load 'script.groovy'
-	ejecucion.call()
-*/
 def call(stages){
-echo '1'
+
+    def stageslist = stages.split(";")
+    println("===>${it}")
+
     def listStagesOrder = [
         'build': 'stageCleanBuildTest',
         'sonar': 'stageSonar',
@@ -14,7 +12,7 @@ echo '1'
         'run_jar': 'stageRunJar',
         'curl_jar': 'stageCurlJar'
     ]
-echo '2'​
+
     if (stages == "") {
         echo 'El pipeline se ejecutará completo'
         allStages()
@@ -28,8 +26,7 @@ echo '2'​
                 }
             }
         }
-​
-    }    
+​    }
 }
 
 
