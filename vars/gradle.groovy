@@ -1,3 +1,5 @@
+import utilities.*
+
 def call(stages)
 {
     def listStagesOrder = [
@@ -10,19 +12,18 @@ def call(stages)
         'curl_jar': 'stageCurlJar'
     ]
 
-    if (stages.isEmpty()) {
+    def arrayUtils = new array.arrayExtentions();
+    def stagesArray = []
+        stagesArray = arrayUtils.searchKeyInArray(stages, ";", listStagesOrder)
+
+    if (stagesArray.isEmpty()) {
         echo 'El pipeline se ejecutará completo'
         allStages()
     } else {
         echo 'Stages a ejecutar :' + stages
-        listStagesOrder.each { stageName, stageFunction ->
-            stages.each{ stageToExecute ->//variable as param
-                echo 'stageToExecute ==> ' + stageToExecute + 'stageName ==>' + stageName
-                if(stageName.equals(stageToExecute)){
-                echo 'Ejecutando ' + stageFunction
-                "${stageFunction}"()
-                }
-            }
+        stagesArray.each{ stageFunction ->//variable as param
+            echo 'Ejecutando ' + stageFunction
+            "${stageFunction}"()
         }
     }
 }
