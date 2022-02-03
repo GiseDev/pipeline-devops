@@ -20,12 +20,9 @@ def call(stages)
                 if(stageName.equals(stageToExecute)){
                 echo 'Ejecutando ' + stageFunction
                 "${stageFunction}"()
-                } else {
-                    echo 'Stage ' + stageToExecute + ' no tiene una funcion asociada'
                 }
             }
         }
-​
     }
 }
 def stageCleanBuildTest(){
