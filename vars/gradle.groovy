@@ -23,6 +23,8 @@ def call(stages)
                 if(stageName.equals(stageToExecute)){
                 echo 'Ejecutando ' + stageFunction
                 "${stageFunction}"()
+                } else {
+                    echo 'Stage ' + stageToExecute + ' no tiene una funcion asociada'
                 }
             }
         }
@@ -48,8 +50,66 @@ def stageSonar() {
     }
 }
 
+def stageRunSpringCurl() {
+    stage("Paso 3: Curl Springboot Gradle sleep 20"){
+        env.TAREA = "Paso 3: Curl Springboot Gradle sleep 30"
+        sh "gradle bootRun&"
+        sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+    }
+}
+
+def stageUploadNexus() {
+
+    stage("Paso 4: Subir Nexus"){
+        env.TAREA = "Paso 4: Subir Nexus"
+        nexusPublisher nexusInstanceId: 'nexus',
+        nexusRepositoryId: 'devops-usach-nexus',
+        packages: [
+            [$class: 'MavenPackage',
+                mavenAssetList: [
+                    [classifier: '',
+                    extension: 'jar',
+                    filePath: 'build/libs/DevOpsUsach2020-0.0.1.jar'
+                ]
+            ],
+                mavenCoordinate: [
+                    artifactId: 'DevOpsUsach2020',
+                    groupId: 'com.devopsusach2020',
+                    packaging: 'jar',
+                    version: '0.0.1'
+                ]
+            ]
+        ]
+    }
+}
+
+def stageDownloadNexus() {
+
+    stage("Paso 5: Descargar Nexus"){
+        env.TAREA = "Paso 5: Descargar Nexus"
+        sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
+    }
+}
+def stageRunJar() {
+    stage("Paso 6: Levantar Artefacto Jar"){
+        env.TAREA = "Paso 6: Levantar Artefacto Jar"
+        sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
+    }
+}
+def stageCurlJar() {
+    stage("Paso 7: Testear Artefacto - Dormir(Esperar 50sg) "){
+        env.TAREA = "Paso 7: Testear Artefacto"
+        sh "sleep 50 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+    }
+}
+
 def allStages(){
     stageCleanBuildTest()
     stageSonar()
+    stageRunSpringCurl()
+    stageUploadNexus()
+    stageDownloadNexus()
+    stageRunJar()
+    stageCurlJar()
 }
 return this;
