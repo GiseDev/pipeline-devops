@@ -1,6 +1,7 @@
 def call(stages){
+echo 'Stages a ejecutar :' + stages
 
-    def stageslist = stages.split(";")
+    def stagesList = stages.split(";")
    stagesList.each{
          println("===>${it}")
          "${it}"()
