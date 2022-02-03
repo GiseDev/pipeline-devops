@@ -20,7 +20,7 @@ def call(stages)
         echo 'El pipeline se ejecutará completo'
         allStages()
     } else {
-        echo 'Stages a ejecutar :' + stages
+        echo 'Stages a ejecutar :' + stagesArray
         stagesArray.each{ stageFunction ->//variable as param
             echo 'Ejecutando ' + stageFunction
             "${stageFunction}"()
