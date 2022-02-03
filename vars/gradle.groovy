@@ -4,7 +4,7 @@
 	ejecucion.call()
 */
 def call(stages){
-
+echo '1'
     def listStagesOrder = [
         'build': 'stageCleanBuildTest',
         'sonar': 'stageSonar',
@@ -14,7 +14,7 @@ def call(stages){
         'run_jar': 'stageRunJar',
         'curl_jar': 'stageCurlJar'
     ]
-​
+echo '2'​
     if (stages.isEmpty()) {
         echo 'El pipeline se ejecutará completo'
         allStages()
