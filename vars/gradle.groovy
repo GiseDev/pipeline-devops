@@ -17,6 +17,7 @@ def call(stages)
         echo 'Stages a ejecutar :' + stages
         listStagesOrder.each { stageName, stageFunction ->
             stages.each{ stageToExecute ->//variable as param
+                echo 'stageToExecute ==> ' + stageToExecute + 'stageName ==>' + stageName
                 if(stageName.equals(stageToExecute)){
                 echo 'Ejecutando ' + stageFunction
                 "${stageFunction}"()
