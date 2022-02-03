@@ -31,15 +31,7 @@ echo '2'​
 ​
     }    
 }
-def allStages(){
-    stageCleanBuildTest()
-    stageSonar()
-    stageRunSpringCurl()
-    stageUploadNexus()
-    stageDownloadNexus()
-    stageRunJar()
-    stageCurlJar()
-}
+
 
 def stageCleanBuildTest(){
     env.TAREA = "Paso 1: Build && Test"
@@ -111,5 +103,15 @@ def stageCurlJar() {
         env.TAREA = "Paso 7: Testear Artefacto"
         sh "sleep 50 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
     }
+}
+
+def allStages(){
+    stageCleanBuildTest()
+    stageSonar()
+    stageRunSpringCurl()
+    stageUploadNexus()
+    stageDownloadNexus()
+    stageRunJar()
+    stageCurlJar()
 }
 return this;
