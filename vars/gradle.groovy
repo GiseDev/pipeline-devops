@@ -12,5 +12,32 @@ def call(stages)
         'run_jar': 'stageRunJar',
         'curl_jar': 'stageCurlJar'
     ]
+
+    if (stages.isEmpty()) {
+        echo 'El pipeline se ejecutará completo'
+        allStages()
+    } else {
+        echo 'Stages a ejecutar :' + stages
+        listStagesOrder.each { stageName, stageFunction ->
+            stages.each{ stageToExecute ->//variable as param
+                if(stageName.equals(stageToExecute)){
+                echo 'Ejecutando ' + stageFunction
+                "${stageFunction}"()
+                }
+            }
+        }
+​
+    }
+}
+def stageCleanBuildTest(){
+    env.TAREA = "Paso 1: Build && Test"
+    stage("$env.TAREA"){
+        sh "echo 'Build && Test!'"
+        sh "gradle clean build"
+        // code
+    }
+}
+def allStages(){
+    stageCleanBuildTest()
 }
 return this;
