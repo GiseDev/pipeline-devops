@@ -29,14 +29,18 @@ def call(stages){
             }
         }
 ​
-    }
-
-   
-    
-    
-    
-    
+    }    
 }
+def allStages(){
+    stageCleanBuildTest()
+    stageSonar()
+    stageRunSpringCurl()
+    stageUploadNexus()
+    stageDownloadNexus()
+    stageRunJar()
+    stageCurlJar()
+}
+
 def stageCleanBuildTest(){
     env.TAREA = "Paso 1: Build && Test"
     stage("$env.TAREA"){
