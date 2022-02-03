@@ -17,20 +17,20 @@ echo 'Stages a ejecutar :' + stages
         'curl_jar': 'stageCurlJar'
     ]
 
-    if (stages == "") {
-        echo 'El pipeline se ejecutará completo'
-        allStages()
-    } else {
-        echo 'Stages a ejecutar :' + stages
-        listStagesOrder.each { stageName, stageFunction ->
-            stages.each{ stageToExecute ->//variable as param
-                if(stageName.equals(stageToExecute)){
-                echo 'Ejecutando ' + stageFunction
-                "${stageFunction}"()
-                }
-            }
-        }
-​    }
+    //if (stages == "") {
+    //    echo 'El pipeline se ejecutará completo'
+    //    allStages()
+    //} else {
+    //    echo 'Stages a ejecutar :' + stages
+    //    listStagesOrder.each { stageName, stageFunction ->
+    //        stages.each{ stageToExecute ->//variable as param
+    //            if(stageName.equals(stageToExecute)){
+    //            echo 'Ejecutando ' + stageFunction
+    //            "${stageFunction}"()
+    //            }
+    //        }
+    //    }
+​   // }
 }
 
 
