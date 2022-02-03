@@ -37,7 +37,19 @@ def stageCleanBuildTest(){
         // code
     }
 }
+
+def stageSonar() {
+    stage("Paso 2: Sonar - Análisis Estático"){
+        env.TAREA = "Paso 2: Sonar - Análisis Estático"
+        sh "echo 'Análisis Estático!'"
+        withSonarQubeEnv('sonarqube') {
+            sh './gradlew sonarqube -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build'
+        }
+    }
+}
+
 def allStages(){
     stageCleanBuildTest()
+    stageSonar()
 }
 return this;
