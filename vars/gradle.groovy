@@ -1,7 +1,10 @@
 def call(stages){
 
     def stageslist = stages.split(";")
-    println("===>${it}")
+   stagesList.each{
+         println("===>${it}")
+         "${it}"()
+     }
 
     def listStagesOrder = [
         'build': 'stageCleanBuildTest',
