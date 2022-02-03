@@ -17,16 +17,18 @@ def call(){
             stage("Pipeline"){
                 steps {
                     script{
-                    if(params.compileTool == 'maven'){
-                            //compilar maven
-                            //def executor = load "maven.groovy"
-                            //executor.call()
-                            maven.call(params.stages);
+                        sh "env"
+                        env.TAREA = ""
+                        if(params.compileTool == 'maven'){
+                                //compilar maven
+                                //def executor = load "maven.groovy"
+                                //executor.call()
+                                maven.call(params.stages);
                         }else{
-                            //compilar gradle
-                            //def executor = load "gradle.groovy"
-                            //executor.call()
-                            gradle.call(params.stages)
+                                //compilar gradle
+                                //def executor = load "gradle.groovy"
+                                //executor.call()
+                                gradle.call(params.stages)
                         }
                     }
                 }
