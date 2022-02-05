@@ -23,14 +23,14 @@ def call(){
                       }
                   }
               }
-              post{
-                    success{
-                        slackSend color: 'good', message: "Giselle [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa. Ejecutado con [${params.compileTool}]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-token'
-                    }
-                    failure{
-                        slackSend color: 'danger', message: "Giselle [${env.JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida en stage [${env.TAREA}]. Ejecutado con [${params.compileTool}]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-token'
-                    }
-                }
+              //post{
+              //      success{
+              //          slackSend color: 'good', message: "Giselle [${JOB_NAME}] [${BUILD_TAG}] Ejecucion Exitosa. Ejecutado con [${params.compileTool}]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-token'
+              //      }
+              //      failure{
+              //          slackSend color: 'danger', message: "Giselle [${env.JOB_NAME}] [${BUILD_TAG}] Ejecucion fallida en stage [${env.TAREA}]. Ejecutado con [${params.compileTool}]", teamDomain: 'dipdevopsusac-tr94431', tokenCredentialId: 'slack-token'
+              //      }
+              //  }
           }
       }
   }
