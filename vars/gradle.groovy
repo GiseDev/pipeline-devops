@@ -39,8 +39,7 @@ def gitmerge(){
                     git checkout ''develop''; git pull
                     git checkout -b ''feature-test-git''
                     git push origin ''feature-test-git''
-                    git checkout ''develop''; git pull
-                    git branch -d ''feature-test-git''
+                    git merge ''develop''; git push
                 '''
         }
     
