@@ -37,9 +37,9 @@ def gitmerge(){
                 sh '''
                     git fetch -p 
                     git checkout ''develop''; git pull
-                    git checkout -b ''feature-test-git''
+                    git checkout ''feature-test-git''
+                    git merge develop;
                     git push origin ''feature-test-git''
-                    git merge ''develop''; git push
                 '''
         }
     
