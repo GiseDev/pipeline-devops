@@ -31,14 +31,19 @@ def call(stages)
 
 def gitmerge(){
     sh "echo 'en git step'"
-    sh '''
-		git fetch -p 
-		git checkout ''develop''; git pull
-		git checkout -b ''feature-test-git''
-		git push origin ''feature-test-git''
-		git checkout ''develop''; git pull
-		git branch -d ''feature-test-git''
-	'''
+    withCredentials([
+            gitUsernamePassword(credentialsId: 'githubUserpass', gitToolName: 'Default')
+        ]) {
+                sh '''
+                    git fetch -p 
+                    git checkout ''develop''; git pull
+                    git checkout -b ''feature-test-git''
+                    git push origin ''feature-test-git''
+                    git checkout ''develop''; git pull
+                    git branch -d ''feature-test-git''
+                '''
+        }
+    
 }
 
 def stageCleanBuildTest(){
