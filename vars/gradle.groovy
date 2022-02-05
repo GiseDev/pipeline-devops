@@ -3,6 +3,7 @@ import utilities.*
 def call(stages)
 {
     def listStagesOrder = [
+        'git' : 'gitmerge'
         'build': 'stageCleanBuildTest',
         'sonar': 'stageSonar',
         'run_spring_curl': 'stageRunSpringCurl',
@@ -27,6 +28,11 @@ def call(stages)
         }
     }
 }
+
+def gitmerge() {
+    echo "en git step"
+}
+
 def stageCleanBuildTest(){
     env.TAREA = "Paso 1: Build && Test"
     stage("$env.TAREA"){

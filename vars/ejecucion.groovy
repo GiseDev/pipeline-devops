@@ -19,7 +19,6 @@ def call(){
 
                         maven.call(params.stages);
                       }else{
-                        echo 'prellamada'
                         gradle.call(params.stages)
                       }
                   }
