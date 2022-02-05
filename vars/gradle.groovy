@@ -3,7 +3,7 @@ import utilities.*
 def call(stages)
 {
     def listStagesOrder = [
-        'git' : 'gitmerge'
+        'git' : 'gitmerge',
         'build': 'stageCleanBuildTest',
         'sonar': 'stageSonar',
         'run_spring_curl': 'stageRunSpringCurl',
