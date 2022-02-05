@@ -29,8 +29,8 @@ def call(stages)
     }
 }
 
-def gitmerge() {
-    echo "en git step"
+def gitmerge(){
+    sh "echo 'en git step'"
 }
 
 def stageCleanBuildTest(){
