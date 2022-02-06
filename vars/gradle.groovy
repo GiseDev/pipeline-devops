@@ -32,7 +32,7 @@ def call(stages)
 def gitmerge(){
     sh "echo 'en git step'"
     withCredentials([
-            gitUsernamePassword(credentialsId: 'githubUserpass', gitToolName: 'Default')
+            gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
         ]) {
                 sh '''
                     git fetch -p 
