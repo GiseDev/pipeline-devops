@@ -31,16 +31,27 @@ def call(stages)
 
 def gitMergeMaster(){
     withCredentials([
-            gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
-        ]) { 
-            sh '''
-              git fetch -p 
-git checkout ''develop''; git pull   
-git checkout ''feature-test-git''	
-git merge develop;					
-git push origin ''feature-test-git''	
-              '''
-        }
+        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
+    ]) { 
+        sh '''
+            git fetch -p 
+            git checkout ''release''; git pull   
+            git checkout ''main''	
+            git merge release;					
+            git push origin ''main''	
+        '''
+    }
+}
+
+def gitMergeDevelop(){
+    withCredentials([
+        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
+    ]) { 
+        sh '''
+            git fetch -p 
+            git checkout ''feature-dir-inicial''; git pull   
+        '''
+    }
 }
 
 def stageCleanBuildTest(){
