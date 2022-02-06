@@ -3,7 +3,7 @@ import utilities.*
 def call(stages)
 {
     def listStagesOrder = [
-        'git' : 'gitmerge',
+        'git' : 'gitMergeMaster',
         'build': 'stageCleanBuildTest',
         'sonar': 'stageSonar',
         'run_spring_curl': 'stageRunSpringCurl',
@@ -24,7 +24,7 @@ def call(stages)
         echo 'Stages a ejecutar :' + stagesArray
         stagesArray.each{ stageFunction ->//variable as param
             echo 'Ejecutando ' + stageFunction
-            "${stageFunction}"('main')
+            "${stageFunction}"()
         }
     }
 }
