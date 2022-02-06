@@ -6,24 +6,6 @@ def call(String chosenStages){
 
 	def pipelineStages = (utils.isCIorCD().contains('ci')) ? ['buildAndTest','sonar','runJar','rest','nexusCI'] : ['downloadNexus','runDownloadedJar','rest','nexusCD']
 
-    if (utils.isCIorCD().contains('ci')) {
-        println("***************************************************************")
-        figlet  " ${params.compileTool} "
-        println("***************************************************************")
-        println("***************************************************************")
-        figlet  " integracion continua "
-        println("***************************************************************")
-    }
-    else {
-        println("***************************************************************")
-        figlet  " ${params.compileTool} "
-        println("***************************************************************")
-        println("***************************************************************")
-        figlet  " integracion continua "
-        println("***************************************************************")
-    }
-
-
 	def stages = utils.getValidatedStages(chosenStages, pipelineStages)
 
 	stages.each{
