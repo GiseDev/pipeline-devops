@@ -35,10 +35,7 @@ def gitMergeMaster(){
     ]) { 
         sh '''
             git fetch -p 
-            git checkout ''release''; git pull   
-            git checkout ''main''	
-            git merge release;					
-            git push origin ''main''	
+            git checkout ''feature-dir-inicial''; git pull   
         '''
     }
 }
