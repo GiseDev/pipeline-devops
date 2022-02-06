@@ -16,7 +16,10 @@ def call(){
           stage("Pipeline"){
               steps {
                   script{
-                      gradle.call(stages)
+                    println("***************************************************************")
+                    figlet  " ${params.compileTool} "
+                    println("***************************************************************")
+                    gradle.call(stages)
                   }
               }
               post{
