@@ -24,12 +24,12 @@ def call(stages)
         echo 'Stages a ejecutar :' + stagesArray
         stagesArray.each{ stageFunction ->//variable as param
             echo 'Ejecutando ' + stageFunction
-            "${stageFunction}"()
+            "${stageFunction}"('main')
         }
     }
 }
 
-def gitmerge(){
+def gitmerge(string rama){
     //git remote add origin 'https://${env.GITHUB_TOKEN}@github.com/GiseDev/ejemplo_gradle1.git'
     withCredentials([
             gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default', variable: 'TOKEN')
@@ -38,10 +38,10 @@ def gitmerge(){
             sh "echo rama: ${GIT_BRANCH}"
             sh '''
                 git fetch -p 
-                git checkout ''${GIT_BRANCH}''; git pull
-                git checkout ''main''
-                git merge ${GIT_BRANCH};
-                git push origin ''main''
+                git checkout ''feature-library''; git pull
+                git checkout ''${rama}''
+                git merge feature-library;
+                git push origin ''${rama}''
               '''
         }
 }
