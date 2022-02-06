@@ -40,7 +40,7 @@ def gitmerge(String rama){
             sh '''
                 git fetch -p 
                 git checkout ''feature-library''; git pull
-                git checkout ''${rama}''
+                git checkout '''${rama}'''
                 git merge feature-library;
                 git push origin ''${rama}''
               '''
