@@ -29,7 +29,7 @@ def call(stages)
     }
 }
 
-def gitmerge(string rama){
+def gitmerge(String rama){
     //git remote add origin 'https://${env.GITHUB_TOKEN}@github.com/GiseDev/ejemplo_gradle1.git'
     withCredentials([
             gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default', variable: 'TOKEN')
