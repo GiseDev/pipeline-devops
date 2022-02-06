@@ -29,19 +29,15 @@ def call(stages)
     }
 }
 
-def gitmerge(String rama){
-    //git remote add origin 'https://${env.GITHUB_TOKEN}@github.com/GiseDev/ejemplo_gradle1.git'
+def gitMergeMaster(){
     withCredentials([
-            gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default', variable: 'TOKEN')
+            gitUsernamePassword(credentialsId: '${env.GITHUB_TOKEN}', gitToolName: 'Default')
         ]) { 
-            sh "echo 'en git step'"
-            sh "echo rama: ${GIT_BRANCH}"
-            sh "echo destino: ${rama}"
             sh '''
                git fetch -p 
                 git checkout feature-library; git pull
                 git checkout main		
-                git merge release;		
+                git merge feature-library;		
                 git push origin main	
               '''
         }
