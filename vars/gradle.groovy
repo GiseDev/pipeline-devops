@@ -35,12 +35,13 @@ def gitmerge(){
             gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default', variable: 'TOKEN')
         ]) { 
             sh "echo 'en git step'"
+            sh "echo rama: ${GIT_BRANCH}"
             sh '''
                 git fetch -p 
-                git checkout ''develop''; git pull
-                git checkout ''feature-test-git''
-                git merge develop;
-                git push origin ''feature-test-git''
+                git checkout ''${GIT_BRANCH}''; git pull
+                git checkout ''main''
+                git merge ${GIT_BRANCH};
+                git push origin ''main''
               '''
         }
 }
