@@ -35,7 +35,7 @@ def gitMergeMaster(){
     ]) { 
         sh '''
             git fetch -p 
-            git checkout ''maven-gradle''; git pull   
+            git checkout ''feature-test-2''; git pull   
         '''
     }
 }
