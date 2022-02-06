@@ -30,19 +30,22 @@ def call(stages)
 }
 
 def gitmerge(){
+    //withCredentials([
+    //        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default', variable: 'TOKEN')
+    //    ]) {
+    //            
+    //    }
+    
     sh "echo 'en git step'"
     sh '''
+                    git remote add origin 'https://{TOKEN}@github.com/GiseDev/ejemplo_gradle1.git'
                     git fetch -p 
                     git checkout ''develop''; git pull
                     git checkout ''feature-test-git''
                     git merge develop;
                     git push origin ''feature-test-git''
                 '''
-    //withCredentials([
-    //        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
-    //    ]) {
-    //            
-    //    }
+    
     
 }
 
