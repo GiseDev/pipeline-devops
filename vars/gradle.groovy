@@ -36,6 +36,7 @@ def gitmerge(String rama){
         ]) { 
             sh "echo 'en git step'"
             sh "echo rama: ${GIT_BRANCH}"
+            sh "echo destino: ${rama}"
             sh '''
                 git fetch -p 
                 git checkout ''feature-library''; git pull
