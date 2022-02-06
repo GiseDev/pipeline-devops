@@ -35,7 +35,10 @@ def gitMergeMaster(){
     ]) { 
         sh '''
             git fetch -p 
-            git checkout ''feature-test-2''; git pull   
+            git checkout ''feature-test-2''; git pull  
+            git checkout ''main''	
+            git merge feature-test-2;					
+            git push origin ''main'' 
         '''
     }
 }
