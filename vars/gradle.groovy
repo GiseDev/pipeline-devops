@@ -1,135 +1,84 @@
-import utilities.*
+import pipeline.*
 
-def call(stages)
-{
-    def listStagesOrder = [
-        'git' : 'gitMergeMaster',
-        'build': 'stageCleanBuildTest',
-        'sonar': 'stageSonar',
-        'run_spring_curl': 'stageRunSpringCurl',
-        'upload_nexus': 'stageUploadNexus',
-        'download_nexus': 'stageDownloadNexus',
-        'run_jar': 'stageRunJar',
-        'curl_jar': 'stageCurlJar'
-    ]
+def call(String chosenStages){
 
-    def arrayUtils = new array.arrayExtentions();
-    def stagesArray = []
-        stagesArray = arrayUtils.searchKeyInArray(stages, ";", listStagesOrder)
+	def utils  = new test.UtilMethods()
 
-    if (stagesArray.isEmpty()) {
-        echo 'El pipeline se ejecutará completo'
-        allStages()
-    } else {
-        echo 'Stages a ejecutar :' + stagesArray
-        stagesArray.each{ stageFunction ->//variable as param
-            echo 'Ejecutando ' + stageFunction
-            "${stageFunction}"()
-        }
+	def pipelineStages = (utils.isCIorCD().contains('ci')) ? ['buildAndTest','sonar','runJar','rest','nexusCI'] : ['downloadNexus','runDownloadedJar','rest','nexusCD']
+
+    if (utils.isCIorCD().contains('ci')) {
+        println("***************************************************************")
+        figlet  " ${params.compileTool} "
+        println("***************************************************************")
+        println("***************************************************************")
+        figlet  " integracion continua "
+        println("***************************************************************")
     }
+    else {
+        println("***************************************************************")
+        figlet  " ${params.compileTool} "
+        println("***************************************************************")
+        println("***************************************************************")
+        figlet  " integracion continua "
+        println("***************************************************************")
+    }
+
+
+	def stages = utils.getValidatedStages(chosenStages, pipelineStages)
+
+	stages.each{
+		stage(it){
+			try {
+				"${it}"()
+			}
+			catch(Exception e) {
+				error "Stage ${it} tiene problemas: ${e}"
+			}
+		}
+	}
 }
 
-def gitMergeMaster(){
-    withCredentials([
-        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
-    ]) { 
-        sh '''
-            git fetch -p 
-            git checkout ''feature-test-2''; git pull  
-            git checkout ''main''	
-            git merge feature-test-2;					
-            git push origin ''main'' 
-        '''
-    }
+def buildAndTest(){
+    env.TAREA = "buildAndTest"
+	sh './gradlew clean build'
 }
 
-def gitMergeDevelop(){
-    withCredentials([
-        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
-    ]) { 
-        sh '''
-            git fetch -p 
-            git checkout ''feature-dir-inicial''; git pull   
-        '''
-    }
+def sonar(){
+    env.TAREA = "sonar"
+	def sonarhome = tool 'sonar-scanner'
+    sh "${sonarhome}/bin/sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
 }
 
-def stageCleanBuildTest(){
-    env.TAREA = "Paso 1: Build && Test"
-    stage("$env.TAREA"){
-        sh "echo 'Build && Test!'"
-        sh "gradle clean build"
-    }
+def runJar(){
+    env.TAREA = "runJar"
+	sh "nohup bash gradlew bootRun &"
+	sleep 20
 }
 
-def stageSonar() {
-    stage("Paso 2: Sonar - Análisis Estático"){
-        env.TAREA = "Paso 2: Sonar - Análisis Estático"
-        sh "echo 'Análisis Estático!'"
-        withSonarQubeEnv('sonarqube') {
-            sh './gradlew sonarqube -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build'
-        }
-    }
+def rest(){
+    env.TAREA = "rest"
+	sh "curl -X GET http://localhost:8082/rest/mscovid/test?msg=testing"
 }
 
-def stageRunSpringCurl() {
-    stage("Paso 3: Curl Springboot Gradle sleep 20"){
-        env.TAREA = "Paso 3: Curl Springboot Gradle sleep 30"
-        sh "gradle bootRun&"
-        sh "sleep 30 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
-    }
+def nexusCI(){
+    env.TAREA = "nexusCI"
+    nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'test-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: "build/DevOpsUsach2020-0.0.1.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: "0.0.1-${env.GIT_BRANCH}"]]]  
 }
 
-def stageUploadNexus() {
-    stage("Paso 4: Subir Nexus"){
-        env.TAREA = "Paso 4: Subir Nexus"
-        nexusPublisher nexusInstanceId: 'nexus',
-        nexusRepositoryId: 'devops-usach-nexus',
-        packages: [
-            [$class: 'MavenPackage',
-                mavenAssetList: [
-                    [classifier: '',
-                    extension: 'jar',
-                    filePath: 'build/libs/DevOpsUsach2020-0.0.1.jar'
-                ]
-            ],
-                mavenCoordinate: [
-                    artifactId: 'DevOpsUsach2020',
-                    groupId: 'com.devopsusach2020',
-                    packaging: 'jar',
-                    version: '0.0.1'
-                ]
-            ]
-        ]
-    }
+def downloadNexus(){
+    env.TAREA = "downloadNexus"
+    sh "curl -X GET -u admin:admin http://localhost:8081/repository/test-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1-develop/DevOpsUsach2020-0.0.1-develop.jar -O"
 }
 
-def stageDownloadNexus() {
-    stage("Paso 5: Descargar Nexus"){
-        env.TAREA = "Paso 5: Descargar Nexus"
-        sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
-    }
-}
-def stageRunJar() {
-    stage("Paso 6: Levantar Artefacto Jar"){
-        env.TAREA = "Paso 6: Levantar Artefacto Jar"
-        sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
-    }
-}
-def stageCurlJar() {
-    stage("Paso 7: Testear Artefacto - Dormir(Esperar 50sg) "){
-        env.TAREA = "Paso 7: Testear Artefacto"
-        sh "sleep 50 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
-    }
+def runDownloadedJar(){
+    env.TAREA = "runDownloadedJar"
+    sh "nohup java -jar DevOpsUsach2020-0.0.1-develop.jar &"
+    sleep 20
 }
 
-def allStages(){
-    stageCleanBuildTest()
-    stageSonar()
-    stageRunSpringCurl()
-    stageUploadNexus()
-    stageDownloadNexus()
-    stageRunJar()
-    stageCurlJar()
+def nexusCD(){
+    env.TAREA = "nexusCD"
+    nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'test-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: "DevOpsUsach2020-0.0.1-develop.jar"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]  
 }
+
 return this;
