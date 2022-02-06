@@ -31,17 +31,18 @@ def call(stages)
 
 def gitmerge(){
     sh "echo 'en git step'"
-    withCredentials([
-            gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
-        ]) {
-                sh '''
+    sh '''
                     git fetch -p 
                     git checkout ''develop''; git pull
                     git checkout ''feature-test-git''
                     git merge develop;
                     git push origin ''feature-test-git''
                 '''
-        }
+    //withCredentials([
+    //        gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
+    //    ]) {
+    //            
+    //    }
     
 }
 
