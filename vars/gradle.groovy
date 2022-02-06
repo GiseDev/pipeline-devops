@@ -31,7 +31,7 @@ def call(stages)
 
 def gitMergeMaster(){
     withCredentials([
-            gitUsernamePassword(credentialsId: '${env.GITHUB_TOKEN}', gitToolName: 'Default')
+            gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
         ]) { 
             sh '''
                git fetch -p 
