@@ -4,6 +4,8 @@ def call(){
       environment {
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
+          GITHUB-TOKEN     = credentials('jenkins-git-user')
+
       }
       parameters {
             choice choices: ['maven', 'gradle'], description: 'Seleccione una herramienta para preceder a compilar', name: 'compileTool'
