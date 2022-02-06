@@ -38,11 +38,11 @@ def gitmerge(String rama){
             sh "echo rama: ${GIT_BRANCH}"
             sh "echo destino: ${rama}"
             sh '''
-                git fetch -p 
-                git checkout ''feature-library''; git pull
-                git checkout '''${rama}'''
-                git merge feature-library;
-                git push origin ''${rama}''
+               git fetch -p 
+                git checkout feature-library; git pull
+                git checkout main		
+                git merge release;		
+                git push origin main	
               '''
         }
 }
