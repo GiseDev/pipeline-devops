@@ -35,7 +35,7 @@ def gitmerge(){
     //    ]) {
             sh "echo 'en git step'"
             sh '''
-                git remote add origin 'https://${env.GITHUB-TOKEN}@github.com/GiseDev/ejemplo_gradle1.git'
+                git remote add origin 'https://${env.GITHUB_TOKEN}@github.com/GiseDev/ejemplo_gradle1.git'
                 git fetch -p 
                 git checkout ''develop''; git pull
                   git checkout ''feature-test-git''

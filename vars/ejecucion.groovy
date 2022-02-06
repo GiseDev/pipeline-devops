@@ -4,7 +4,7 @@ def call(){
       environment {
           NEXUS_USER         = credentials('NEXUS-USER')
           NEXUS_PASSWORD     = credentials('NEXUS-PASS')
-          GITHUB-TOKEN     = credentials('jenkins-git-user')
+          GITHUB_TOKEN       = credentials('jenkins-git-user')
 
       }
       parameters {
