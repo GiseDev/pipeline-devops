@@ -35,7 +35,7 @@ def gitMergeMaster(){
     ]) { 
         sh '''
             git fetch -p 
-            git checkout ''feature-dir-inicial''; git pull   
+            git checkout ''maven-gradle''; git pull   
         '''
     }
 }
