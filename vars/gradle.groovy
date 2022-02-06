@@ -34,11 +34,11 @@ def gitMergeMaster(){
             gitUsernamePassword(credentialsId: 'jenkins-git-user', gitToolName: 'Default')
         ]) { 
             sh '''
-               git fetch -p 
-                git checkout feature-library; git pull
-                git checkout main		
-                git merge feature-library;		
-                git push origin main	
+              git fetch -p 
+git checkout ''develop''; git pull     origen
+git checkout ''feature-test-git''		destino
+git merge develop;						origen
+git push origin ''feature-test-git''	destino
               '''
         }
 }
